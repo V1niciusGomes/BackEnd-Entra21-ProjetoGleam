@@ -1,8 +1,8 @@
 package com.gleam.backend.model;
 
+import com.gleam.backend.enums.TipoMovimentacao;
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,22 +13,18 @@ public class MovimentacaoEstoque {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_produto")
+    @JoinColumn(name = "id_produto", nullable = false)
     private Produto produto;
 
+    @Enumerated(EnumType.ORDINAL) // << ALTERADO para ORDINAL
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private TipoMovimentacao tipo; // ENUM('ENTRADA', 'SAIDA')
+    private TipoMovimentacao tipo;
 
     @Column(nullable = false)
     private Integer quantidade;
 
-    @Column(nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false)
     private LocalDateTime dataMovimentacao;
 
     private String observacao;
-
-    public enum TipoMovimentacao {
-        ENTRADA, SAIDA
-    }
 }

@@ -7,5 +7,4 @@ public class ItemVendaDTO {
     private Long idVenda;
     private Long idProduto;
     private Integer quantidade;
-    private Double precoUnitario;
 }

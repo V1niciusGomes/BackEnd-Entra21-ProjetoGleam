@@ -3,6 +3,8 @@ package com.gleam.backend.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal; // ALTERAÇÃO: Import para valores monetários
+
 @Entity
 @Data
 public class ItemVenda {
@@ -22,6 +24,6 @@ public class ItemVenda {
     @Column(nullable = false)
     private Integer quantidade;
 
-    @Column(nullable = false)
-    private Double precoUnitario;
+    @Column(nullable = false, precision = 10, scale = 2) // ALTERAÇÃO: Mapeamento para DECIMAL
+    private BigDecimal precoUnitario; // ALTERAÇÃO: de Double para BigDecimal
 }

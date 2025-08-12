@@ -1,7 +1,7 @@
 package com.gleam.backend.repository;
 
 import com.gleam.backend.model.MovimentacaoEstoque;
-import com.gleam.backend.model.MovimentacaoEstoque.TipoMovimentacao;
+import com.gleam.backend.enums.TipoMovimentacao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,8 +1,10 @@
 package com.gleam.backend.model;
 
+import com.gleam.backend.enums.StatusVenda; // ALTERAÇÃO: Import do novo enum
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal; // ALTERAÇÃO: Import para valores monetários
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,16 +14,17 @@ public class Venda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false)
     private LocalDateTime dataVenda;
 
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
-    @Column(nullable = false)
-    private Double valorTotal;
+    @Column(nullable = false, precision = 10, scale = 2) // ALTERAÇÃO: Mapeamento para DECIMAL
+    private BigDecimal valorTotal; // ALTERAÇÃO: de Double para BigDecimal
 
-    @Column(nullable = false, columnDefinition = "TINYINT UNSIGNED DEFAULT 2")
-    private Integer status; // 1: Concluída, 2: Pendente, 3: Cancelada
+    @Enumerated(EnumType.STRING) // ALTERAÇÃO: Anotação para usar o enum
+    @Column(nullable = false)
+    private StatusVenda status; // ALTERAÇÃO: de Integer para o enum StatusVenda
 }
