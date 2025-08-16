@@ -11,37 +11,75 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/clientes")
-
 public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
 
-    // Endpoint para criar (cadastrar) um novo cliente
+    /**
+     * Endpoint para CRIAR (cadastrar) um novo cliente.
+     * HTTP POST /api/clientes
+     */
     @PostMapping
     public ResponseEntity<?> createCliente(@RequestBody ClienteDTO dto) {
         try {
             Cliente novoCliente = clienteService.save(dto);
             return ResponseEntity.ok(novoCliente);
         } catch (Exception e) {
-            // Retorna uma mensagem de erro clara em caso de falha (ex: nome vazio, email/cpf duplicado)
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    // Endpoint para buscar todos os clientes cadastrados
+    /**
+     * Endpoint para LER (buscar) todos os clientes cadastrados.
+     * HTTP GET /api/clientes
+     */
     @GetMapping
     public ResponseEntity<List<Cliente>> getAllClientes() {
-        return ResponseEntity.ok().build(); // Placeholder
+        List<Cliente> clientes = clienteService.findAll();
+        return ResponseEntity.ok(clientes);
     }
 
-    // Endpoint para buscar um cliente específico pelo seu ID
+    /**
+     * Endpoint para LER (buscar) um cliente específico pelo seu ID.
+     * HTTP GET /api/clientes/{id}
+     */
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> getClienteById(@PathVariable Long id) {
-        // ClienteRepository clienteRepository = ...
-        // return clienteRepository.findById(id)
-        //         .map(ResponseEntity::ok)
-        //         .orElse(ResponseEntity.notFound().build());
-        return ResponseEntity.ok().build(); // Placeholder
+    public ResponseEntity<?> getClienteById(@PathVariable Long id) {
+        try {
+            Cliente cliente = clienteService.findById(id);
+            return ResponseEntity.ok(cliente);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * Endpoint para ATUALIZAR (editar) um cliente existente.
+     * HTTP PUT /api/clientes/{id}
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateCliente(@PathVariable Long id, @RequestBody ClienteDTO dto) {
+        try {
+            Cliente clienteAtualizado = clienteService.update(id, dto);
+            return ResponseEntity.ok(clienteAtualizado);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    /**
+     * Endpoint para APAGAR um cliente.
+     * HTTP DELETE /api/clientes/{id}
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCliente(@PathVariable Long id) {
+        try {
+            clienteService.delete(id);
+            // Retorna uma resposta 204 No Content, indicando sucesso sem corpo de resposta.
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
