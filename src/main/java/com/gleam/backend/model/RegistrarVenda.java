@@ -13,12 +13,13 @@ import java.util.List;
 @Table(name = "registrar_vendas")
 public class RegistrarVenda {
 
+    // ... (Constantes)
     public static final Integer SITUACAO_PENDENTE = 0;
     public static final Integer SITUACAO_PAGO = 1;
-    public static final Integer PAGAMENTO_PIX = 1;
-    public static final Integer PAGAMENTO_DINHEIRO = 2;
-    public static final Integer PAGAMENTO_CREDITO = 3;
-    public static final Integer PAGAMENTO_DEBITO = 4;
+    public static final Integer PAGAMENTO_PIX = 0;
+    public static final Integer PAGAMENTO_DINHEIRO = 1;
+    public static final Integer PAGAMENTO_CREDITO = 2;
+    public static final Integer PAGAMENTO_DEBITO = 3;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +28,12 @@ public class RegistrarVenda {
     @Column(nullable = false)
     private String nome;
 
-    @Column(name = "nome_cliente")
-    private String nomeCliente;
+    // A RELAÇÃO CORRETA COM O CLIENTE
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
 
+    // ... (outros campos como situacao, formaPagamento, etc.)
     @Column(nullable = false)
     private Integer situacao;
 
@@ -42,11 +46,9 @@ public class RegistrarVenda {
     @Column(name = "numero_parcelas")
     private Integer numeroParcelas;
 
-    // CORREÇÃO AQUI: Garante que a lista é sempre inicializada
     @OneToMany(mappedBy = "registrarVenda", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemVendido> itens = new ArrayList<>();
 
-    // CORREÇÃO AQUI: Garante que o campo dataCriacao existe
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
